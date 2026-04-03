@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{fragments :: header('Modern Student Dashboard')}"></head>
+<body>
+
+<div th:replace="~{fragments :: sidebar('home')}"></div>
+
+<div id="main-content">
+    <div class="container-fluid">
+        <h1 class="display-4 fw-bold mb-4" style="color: #1e293b; letter-spacing: -2px;">Welcome back, <span th:text="${username}" class="text-primary">User</span>!</h1>
+        
+        <div th:if="${welcomeMessage}" class="alert alert-success border-0 shadow-sm rounded-4 p-4 mb-5 d-flex align-items-center" style="background: #f0fdf4; color: #15803d;">
+            <div class="me-4 fs-2">🎉</div>
+            <div class="fw-bold fs-5" th:text="${welcomeMessage}"></div>
+        </div>
+
+        <div class="row g-4 mb-5">
+            <div class="col-md-4">
+                <div class="portal-card">
+                    <small class="text-muted text-uppercase fw-bold ls-1 d-block mb-2">Authenticated User</small>
+                    <h3 class="fw-bold mb-1" th:text="${username}">Username</h3>
+                    <p class="text-primary font-monospace" th:text="${email}">Email@test.com</p>
+                    <hr class="my-4 opacity-50">
+                    <div class="d-flex align-items-center">
+                        <div class="me-3 fs-3 text-success">✔️</div>
+                        <span class="fw-semibold">Registration Active</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-8">
+                <div class="portal-card h-100">
+                    <h4 class="fw-bold mb-4">Quick Navigation</h4>
+                    <div class="row g-3">
+                        <div class="col-sm-6">
+                            <a th:href="@{/courses}" class="btn btn-light w-100 p-4 rounded-4 text-start hover-shadow transition">
+                                <div class="fs-2 mb-2">📚</div>
+                                <div class="fw-bold">My Courses</div>
+                            </a>
+                        </div>
+                        <div class="col-sm-6">
+                            <a th:href="@{/students}" class="btn btn-light w-100 p-4 rounded-4 text-start hover-shadow transition">
+                                <div class="fs-2 mb-2">👨‍🎓</div>
+                                <div class="fw-bold">Student List</div>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div th:replace="~{fragments :: footer}"></div>
+    </div>
+</div>
+
+</body>
+</html>

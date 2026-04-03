@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: header('Departments')}"></head>
+<body>
+
+<div th:replace="~{fragments :: sidebar('departments')}"></div>
+
+<div id="main-content">
+    <div class="container-fluid">
+        <h1 class="display-4 fw-bold mb-4" style="color: #1e293b; letter-spacing: -2px;">Academic Departments</h1>
+        <p class="lead text-muted mb-5">Explore our diverse academic departments and learning facilities.</p>
+        
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+            <!-- Computer Science -->
+            <div class="col">
+                <div class="portal-card h-100 p-4 border-0 shadow-sm rounded-4 transition hover-shadow-lg">
+                    <div class="fs-1 mb-3">💻</div>
+                    <h4 class="fw-bold fs-4 mb-2">Computer Science</h4>
+                    <p class="text-muted small">Focused on software engineering, AI, and data science. Innovative research at your fingertips.</p>
+                    <div class="mt-4 d-flex justify-content-between align-items-center">
+                        <span class="badge bg-soft-primary text-primary fw-bold p-2 px-3">28 Faculty</span>
+                        <a href="#" class="text-primary fw-bold text-decoration-none">Learn More →</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Engineering -->
+            <div class="col">
+                <div class="portal-card h-100 p-4 border-0 shadow-sm rounded-4 transition hover-shadow-lg border-start border-5 border-success">
+                    <div class="fs-1 mb-3">⚙️</div>
+                    <h4 class="fw-bold fs-4 mb-2 text-success">Engineering</h4>
+                    <p class="text-muted small">Specialized fields in Civil, Mechanical, and Electrical. Applied knowledge for the future.</p>
+                    <div class="mt-4 d-flex justify-content-between align-items-center">
+                        <span class="badge bg-soft-success text-success fw-bold p-2 px-3">42 Faculty</span>
+                        <a href="#" class="text-success fw-bold text-decoration-none">Learn More →</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Business Administration -->
+            <div class="col">
+                <div class="portal-card h-100 p-4 border-0 shadow-sm rounded-4 transition hover-shadow-lg">
+                    <div class="fs-1 mb-3">📊</div>
+                    <h4 class="fw-bold fs-4 mb-2">Business Admin</h4>
+                    <p class="text-muted small">Equipping the next generation of global leaders, entrepreneurs, and finance experts.</p>
+                    <div class="mt-4 d-flex justify-content-between align-items-center">
+                        <span class="badge bg-soft-primary text-primary fw-bold p-2 px-3">15 Faculty</span>
+                        <a href="#" class="text-primary fw-bold text-decoration-none">Learn More →</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div th:replace="~{fragments :: footer}"></div>
+    </div>
+</div>
+
+<style>
+    .bg-soft-primary { background: #e0e7ff; }
+    .bg-soft-success { background: #dcfce7; }
+</style>
+
+</body>
+</html>

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{fragments :: header('Student Registry')}"></head>
+<body>
+
+<div th:replace="~{fragments :: sidebar('students')}"></div>
+
+<div id="main-content">
+    <div class="container-fluid">
+        <!-- Success Confirmation Alert -->
+        <div th:if="${success}" class="alert alert-success border-0 shadow-sm mb-4 p-3 d-flex align-items-center" 
+             style="border-radius: 16px; background: #ecfdf5; color: #059669;">
+            <div class="me-3 fs-4">✅</div>
+            <div class="fw-bold" th:text="${success}">Confirmation message</div>
+        </div>
+
+        <!-- Error Alert -->
+        <div th:if="${error}" class="alert border-0 shadow-sm mb-4 p-3 d-flex align-items-center"
+             style="border-radius: 16px; background: #fef2f2; color: #dc2626;">
+            <div class="me-3 fs-4">❌</div>
+            <div class="fw-bold" th:text="${error}">Error message</div>
+        </div>
+
+        <!-- Prominent Stats Box -->
+        <div class="row mb-5">
+            <div class="col-12">
+                <div class="portal-card d-flex justify-content-between align-items-center" style="border-radius: 32px;">
+                    <div>
+                        <h2 class="fw-extrabold" style="font-weight: 900; color: #1e293b;">Total Registered Students</h2>
+                        <h1 class="display-1 fw-black text-primary" style="font-weight: 1000;" th:text="${totalStudents}">0</h1>
+                        <p class="text-muted fw-semibold">Current verified student population</p>
+                    </div>
+                    <a th:href="@{/students/add}" class="btn btn-premium btn-lg">➕ Register NEW Student</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Big Box Cards Grid -->
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+            <div th:each="student : ${students}" class="col">
+                <div class="portal-card text-center h-100" style="border-radius: 28px;">
+                    <div class="avatar-box mb-4 mx-auto d-flex align-items-center justify-content-center bg-light rounded-circle" style="width: 80px; height: 80px; font-size: 2rem;">👨‍🎓</div>
+                    <h3 class="fw-bold mb-1" th:text="${student.firstName} + ' ' + ${student.lastName}">Full Name</h3>
+                    <p class="text-primary fw-bold mb-4" th:text="${student.department}">Department</p>
+                    
+                    <div class="p-3 bg-light rounded-4 mb-4 text-start small">
+                        <div class="d-flex justify-content-between mb-2"><span>ID Number:</span> <strong th:text="${student.regNumber}">1001</strong></div>
+                        <div class="d-flex justify-content-between mb-2 text-truncate"><span>Email:</span> <strong th:text="${student.email}" class="text-truncate" style="max-width: 150px;">john@edu.com</strong></div>
+                        <div class="d-flex justify-content-between"><span>Status:</span> <strong class="text-success">ACTIVE</strong></div>
+                    </div>
+
+                    <div class="d-grid gap-3">
+                        <a th:href="@{/students/edit/{id}(id=${student.regNumber})}" class="btn btn-outline-primary fw-bold py-2 border-2" style="border-radius: 12px;">✏️ EDIT RECORD</a>
+                        <a th:href="@{/students/delete/{id}(id=${student.regNumber})}" class="btn btn-outline-danger fw-bold py-2 border-2" style="border-radius: 12px;" onclick="return confirm('Erase this record?')">🗑️ DELETE</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div th:replace="~{fragments :: footer}"></div>
+    </div>
+</div>
+
+</body>
+</html>

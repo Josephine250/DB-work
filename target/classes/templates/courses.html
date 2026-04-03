@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: header('Course Catalog')}"></head>
+<body>
+
+<div th:replace="~{fragments :: sidebar('courses')}"></div>
+
+<div id="main-content">
+    <div class="container-fluid">
+        <h1 class="display-4 fw-bold mb-4" style="color: #1e293b; letter-spacing: -2px;">Course Catalog</h1>
+        <p class="lead text-muted mb-5">Explore available courses across all departments in the current curriculum.</p>
+        
+        <div class="portal-card h-100 bg-white border-0 shadow-lg p-5" style="border-radius: 32px;">
+            <div class="row align-items-center mb-5">
+                <div class="col-md-8">
+                    <h2 class="fw-bold fs-3 mb-2">Available Academic Courses</h2>
+                    <p class="text-muted">Total Courses in registry: <span th:text="${totalCourses}" class="text-primary fw-bold">0</span></p>
+                </div>
+                <div class="col-md-4 text-end">
+                    <button class="btn btn-premium btn-lg">➕ Request New Course</button>
+                </div>
+            </div>
+
+            <div class="row g-4 mt-2">
+                <div th:each="course : ${courses}" class="col-md-6 col-lg-4">
+                    <div class="p-4 rounded-4 bg-light h-100 hover-shadow transition">
+                        <div class="fs-1 d-block mb-3">📘</div>
+                        <h5 class="fw-bold" th:text="${course.courseName}">Engineering Mathematics</h5>
+                        <p class="text-muted small" th:text="'Credits: ' + ${course.credits != null ? course.credits : 'N/A'}">4</p>
+                        <hr class="my-4 opacity-50">
+                        <p class="text-primary fw-bold small mb-0">Code: <span th:text="${course.courseCode}">MATH101</span></p>
+                    </div>
+                </div>
+                <div th:if="${#lists.isEmpty(courses)}" class="col-12 py-5 text-center">
+                    <div class="fs-1 mb-3">⏳</div>
+                    <h4 class="text-muted">No courses currently found in the registry.</h4>
+                </div>
+            </div>
+        </div>
+
+        <div th:replace="~{fragments :: footer}"></div>
+    </div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: header('Welcome to College Portal')}"></head>
+<body class="home-page">
+
+<div th:replace="~{fragments :: sidebar('home')}"></div>
+
+<div id="main-content" class="hero-section">
+    <div class="overlay"></div>
+    <div class="container-fluid py-5 position-relative" style="z-index: 2;">
+        <div class="row align-items-center py-5 min-vh-100">
+            <div class="col-lg-8">
+                <div class="hero-badge mb-4">🌟 Excellence in Higher Education</div>
+                <h1 class="display-1 fw-black pb-3 text-white" style="letter-spacing: -3px; line-height: 0.9;">Empowering Your Learning <span class="text-primary d-block mt-2">Experience.</span></h1>
+                <p class="fs-4 lead text-white-50 mb-5 py-4 max-w-600">Our all-in-one student management portal simplifies registration, academic tracking, and administrative excellence for the modern scholar.</p>
+                
+                <div class="d-flex flex-wrap gap-4 py-3">
+                    <a th:href="@{/register}" class="btn btn-premium btn-lg px-5 py-4 fs-5 shadow-lg d-flex align-items-center gap-2">
+                        <span>🚀</span> Get Started Today
+                    </a>
+                    <a th:href="@{/login}" class="btn btn-glass-light btn-lg px-5 py-4 fs-5 border-2 fw-black text-white shadow-sm rounded-4 d-flex align-items-center gap-2">
+                        <span>🚪</span> Login Portal
+                    </a>
+                </div>
+                
+                <div class="mt-5 d-flex gap-5 align-items-center pt-5">
+                    <div class="stat-simple">
+                        <h2 class="fw-black text-white mb-0">12k+</h2>
+                        <small class="text-white-50 fw-bold text-uppercase ls-1">Active Students</small>
+                    </div>
+                    <div class="vr bg-white opacity-25" style="height: 40px;"></div>
+                    <div class="stat-simple">
+                        <h2 class="fw-black text-white mb-0">50+</h2>
+                        <small class="text-white-50 fw-bold text-uppercase ls-1">Global Institutions</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div th:replace="~{fragments :: footer}"></div>
+    </div>
+</div>
+
+<style>
+    .home-page { 
+        background: #0f172a; 
+    }
+    
+    .hero-section {
+        margin-left: 280px; 
+        padding: 0 !important;
+        background-image: linear-gradient(rgba(15, 23, 42, 0.7), rgba(15, 23, 42, 0.8)), 
+                          url('https://images.unsplash.com/photo-1541339907198-e08756ebafe3?ixlib=rb-1.2.1&auto=format&fit=crop&w=1920&q=80'); /* Professional University Library Fallback */
+        background-size: cover;
+        background-position: center;
+        background-attachment: fixed;
+        min-height: 100vh;
+        position: relative;
+    }
+    
+    .hero-badge {
+        display: inline-block;
+        padding: 10px 24px;
+        background: rgba(79, 70, 229, 0.15);
+        color: var(--primary);
+        border: 1px solid rgba(79, 70, 229, 0.3);
+        border-radius: 99px;
+        font-weight: 700;
+        font-size: 0.85rem;
+        backdrop-filter: blur(10px);
+    }
+    
+    .btn-glass-light {
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        border: 2px solid rgba(255, 255, 255, 0.2) !important;
+        transition: 0.3s;
+    }
+    .btn-glass-light:hover {
+        background: rgba(255, 255, 255, 0.2);
+        border-color: white !important;
+        transform: translateY(-2px);
+    }
+
+    .fw-black { font-weight: 950; }
+    .ls-1 { letter-spacing: 1px; }
+    .max-w-600 { max-width: 650px; }
+    .display-1 { font-size: calc(2.2rem + 4.5vw); }
+    
+    @media (max-width: 768px) {
+        .hero-section { margin-left: 0; }
+    }
+</style>
+
+</body>
+</html>
