@@ -1,67 +1,141 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{fragments :: header(${isEdit ? 'Edit Student' : 'Add Student'})}"></head>
+<head th:replace="~{fragments :: header(${isEdit ? 'Edit Student' : 'Register New Student'})}"></head>
 <body>
 
 <div th:replace="~{fragments :: sidebar('students')}"></div>
 
 <div id="main-content">
     <div class="container-fluid">
-        <h2 class="mb-4 display-4 fw-bold" style="color: #1e293b; letter-spacing: -2px;" 
-            th:text="${isEdit ? 'Edit Student Record' : 'Register New Student'}">Student Form</h2>
-        
-        <div class="portal-card max-width-700 mx-auto mt-2" style="border-radius: 40px; max-width: 800px;">
-            <div th:if="${error}" class="alert alert-danger border-0 shadow-sm rounded-4 p-3 mb-4 d-flex align-items-center" style="background: #fef2f2; color: #dc2626;">
-                <div class="me-3 fs-5">❌</div>
-                <div class="fw-bold" th:text="${error}">Error Message</div>
+
+        <!-- Page Header -->
+        <div class="d-flex align-items-center gap-3 mb-5">
+            <a th:href="@{/students}" class="btn btn-light border-2 fw-bold rounded-4 px-4 py-2 shadow-sm">← Back</a>
+            <div>
+                <h1 class="display-5 fw-bold mb-0" style="color: #1e293b; letter-spacing: -1.5px;"
+                    th:text="${isEdit ? 'Edit Student Record' : 'Register New Student'}">Student Form</h1>
+                <p class="text-muted mb-0" th:text="${isEdit ? 'Update the student\'s information below.' : 'Fill in the details to add a new student to the registry.'}"></p>
             </div>
+        </div>
 
-            <form th:action="@{/students/save}" th:object="${student}" method="POST" class="row g-4">
-                <input type="hidden" th:field="*{email}" th:if="${isEdit}">
-                
+        <!-- Error Alert -->
+        <div th:if="${error}" class="alert border-0 shadow-sm rounded-4 p-3 mb-4 d-flex align-items-center"
+             style="background: #fef2f2; color: #dc2626; max-width: 800px; margin: 0 auto 1.5rem;">
+            <div class="me-3 fs-5">❌</div>
+            <div class="fw-bold" th:text="${error}">Error Message</div>
+        </div>
+
+        <!-- Form Card -->
+        <div class="portal-card mx-auto" style="max-width: 800px; border-radius: 32px;">
+
+            <form th:action="@{/students/save}" th:object="${student}" method="POST" class="row g-4" novalidate>
+
+                <!-- Hidden fields -->
+                <input type="hidden" th:field="*{regNumber}" th:if="${isEdit}">
+
+                <!-- Registration Number -->
                 <div class="col-md-6">
-                    <label class="form-label fw-bold text-muted small text-uppercase">Registration Number</label>
-                    <input type="number" th:field="*{regNumber}" class="form-control p-3 border-2 rounded-4" 
-                           th:readonly="${isEdit}" placeholder="e.g. 2024001" required>
+                    <label class="form-label fw-bold text-muted small text-uppercase ls-1">
+                        Registration Number <span class="text-danger">*</span>
+                    </label>
+                    <input type="number"
+                           th:field="*{regNumber}"
+                           th:readonly="${isEdit}"
+                           class="form-control form-control-lg border-2 rounded-4"
+                           placeholder="e.g. 2024001"
+                           required
+                           min="1">
+                    <div class="form-text text-muted">Unique student ID number</div>
                 </div>
 
+                <!-- Email -->
                 <div class="col-md-6">
-                    <label class="form-label fw-bold text-muted small text-uppercase">Email Address</label>
-                    <input type="email" th:field="*{email}" class="form-control p-3 border-2 rounded-4" 
-                           th:readonly="${isEdit}" placeholder="student@college.edu" required>
+                    <label class="form-label fw-bold text-muted small text-uppercase ls-1">
+                        Email Address <span class="text-danger">*</span>
+                    </label>
+                    <input type="email"
+                           th:field="*{email}"
+                           th:readonly="${isEdit}"
+                           class="form-control form-control-lg border-2 rounded-4"
+                           placeholder="student@college.edu"
+                           required>
+                    <div class="form-text text-muted">Must be unique across all students</div>
                 </div>
 
+                <!-- First Name -->
                 <div class="col-md-6">
-                    <label class="form-label fw-bold text-muted small text-uppercase">First Name</label>
-                    <input type="text" th:field="*{firstName}" class="form-control p-3 border-2 rounded-4" 
-                           placeholder="Enter first name" required>
+                    <label class="form-label fw-bold text-muted small text-uppercase ls-1">
+                        First Name <span class="text-danger">*</span>
+                    </label>
+                    <input type="text"
+                           th:field="*{firstName}"
+                           class="form-control form-control-lg border-2 rounded-4"
+                           placeholder="Enter first name"
+                           required>
                 </div>
 
+                <!-- Last Name -->
                 <div class="col-md-6">
-                    <label class="form-label fw-bold text-muted small text-uppercase">Last Name</label>
-                    <input type="text" th:field="*{lastName}" class="form-control p-3 border-2 rounded-4" 
-                           placeholder="Enter last name" required>
+                    <label class="form-label fw-bold text-muted small text-uppercase ls-1">
+                        Last Name <span class="text-danger">*</span>
+                    </label>
+                    <input type="text"
+                           th:field="*{lastName}"
+                           class="form-control form-control-lg border-2 rounded-4"
+                           placeholder="Enter last name"
+                           required>
                 </div>
 
-                <div class="col-md-12">
-                    <label class="form-label fw-bold text-muted small text-uppercase">Department</label>
-                    <input type="text" th:field="*{department}" class="form-control p-3 border-2 rounded-4" 
-                           placeholder="e.g. Computer Science Science" required>
+                <!-- Department Dropdown -->
+                <div class="col-12">
+                    <label class="form-label fw-bold text-muted small text-uppercase ls-1">Department</label>
+                    <select name="departmentId"
+                            class="form-select form-select-lg border-2 rounded-4">
+                        <option value="">— No Department —</option>
+                        <option th:each="dept : ${departments}"
+                                th:value="${dept.id}"
+                                th:text="${dept.name}"
+                                th:selected="${student.department != null and student.department.id == dept.id}">
+                        </option>
+                    </select>
+                    <div class="form-text text-muted">Select the student's enrolled department</div>
                 </div>
 
-                <div class="col-12 mt-5">
+                <!-- Divider -->
+                <div class="col-12"><hr class="opacity-25 my-2"></div>
+
+                <!-- Action Buttons -->
+                <div class="col-12">
                     <div class="d-flex gap-3">
-                        <button type="submit" class="btn btn-premium btn-lg w-100 py-3" 
-                                th:text="${isEdit ? 'Update Student Profile' : 'Save New Student'}">Submit Form</button>
-                        <a th:href="@{/students}" class="btn btn-light btn-lg w-100 py-3 rounded-4 border-2 fw-bold text-muted shadow-sm">Cancel</a>
+                        <button type="submit" class="btn btn-premium btn-lg flex-fill py-3 fs-6">
+                            <span th:text="${isEdit ? '💾 Update Student' : '✅ Save New Student'}">Submit</span>
+                        </button>
+                        <a th:href="@{/students}"
+                           class="btn btn-light btn-lg flex-fill py-3 rounded-4 border-2 fw-bold text-muted shadow-sm">
+                            Cancel
+                        </a>
                     </div>
                 </div>
+
             </form>
         </div>
 
         <div th:replace="~{fragments :: footer}"></div>
     </div>
 </div>
+
+<style>
+    .ls-1 { letter-spacing: 0.05em; }
+    .form-control:focus, .form-select:focus {
+        border-color: #6366f1 !important;
+        box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
+    }
+    input[readonly] {
+        background: #f8fafc;
+        color: #64748b;
+        cursor: not-allowed;
+    }
+</style>
 
 </body>
 </html>

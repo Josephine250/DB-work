@@ -6,7 +6,10 @@ import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
 
 @Entity
-@Table(name = "courses")
+@Table(name = "courses", indexes = {
+    @Index(name = "idx_course_code", columnList = "course_code"),
+    @Index(name = "idx_course_name", columnList = "course_name")
+})
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

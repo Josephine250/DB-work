@@ -7,33 +7,101 @@
 
 <div id="main-content">
     <div class="container-fluid">
-        <h1 class="display-4 fw-bold mb-4" style="color: #1e293b; letter-spacing: -2px;">Course Catalog</h1>
+        <h1 class="display-4 fw-bold mb-2" style="color: #1e293b; letter-spacing: -2px;">Course Catalog</h1>
         <p class="lead text-muted mb-5">Explore available courses across all departments in the current curriculum.</p>
-        
-        <div class="portal-card h-100 bg-white border-0 shadow-lg p-5" style="border-radius: 32px;">
+
+        <div class="portal-card bg-white border-0 shadow-lg p-5" style="border-radius: 32px;">
             <div class="row align-items-center mb-5">
                 <div class="col-md-8">
-                    <h2 class="fw-bold fs-3 mb-2">Available Academic Courses</h2>
-                    <p class="text-muted">Total Courses in registry: <span th:text="${totalCourses}" class="text-primary fw-bold">0</span></p>
+                    <h2 class="fw-bold fs-3 mb-1">Available Academic Courses</h2>
+                    <p class="text-muted mb-0">Total courses in registry:
+                        <span th:text="${totalCourses}" class="text-primary fw-bold">0</span>
+                    </p>
                 </div>
                 <div class="col-md-4 text-end">
-                    <button class="btn btn-premium btn-lg">➕ Request New Course</button>
+                    <button class="btn btn-premium btn-lg shadow" id="addCourseBtn">
+                        ➕ Register New Course
+                    </button>
                 </div>
             </div>
 
-            <div class="row g-4 mt-2">
-                <div th:each="course : ${courses}" class="col-md-6 col-lg-4">
-                    <div class="p-4 rounded-4 bg-light h-100 hover-shadow transition">
+            <!-- Empty state -->
+            <div th:if="${#lists.isEmpty(courses)}" class="text-center py-5">
+                <div class="fs-1 mb-3">⏳</div>
+                <h4 class="text-muted">No courses currently found in the registry.</h4>
+            </div>
+
+            <!-- Course grid -->
+            <div class="row g-4">
+                <div th:each="course, iterStat : ${courses}" class="col-md-6 col-lg-4">
+                    <div class="course-card p-4 rounded-4 h-100 border"
+                         th:classappend="'color-' + ${iterStat.index % 6}">
                         <div class="fs-1 d-block mb-3">📘</div>
-                        <h5 class="fw-bold" th:text="${course.courseName}">Engineering Mathematics</h5>
-                        <p class="text-muted small" th:text="'Credits: ' + ${course.credits != null ? course.credits : 'N/A'}">4</p>
-                        <hr class="my-4 opacity-50">
-                        <p class="text-primary fw-bold small mb-0">Code: <span th:text="${course.courseCode}">MATH101</span></p>
+                        <h4 class="fw-black course-title mb-1" th:text="${course.courseName}">Course Name</h4>
+                        <p class="course-subtitle small mb-3"
+                           th:if="${course.cName != null and course.cName != course.courseName}"
+                           th:text="${course.cName}">Short Name</p>
+                        <div class="d-flex justify-content-between align-items-center mt-auto">
+                            <span class="badge credits-badge px-3 py-2 rounded-pill small"
+                                  th:text="'Credits: ' + ${course.credits != null ? course.credits : 'N/A'}">Credits</span>
+                            <span class="course-code fw-bold small">
+                                Code: <span th:text="${course.courseCode}">CODE</span>
+                            </span>
+                        </div>
                     </div>
                 </div>
-                <div th:if="${#lists.isEmpty(courses)}" class="col-12 py-5 text-center">
-                    <div class="fs-1 mb-3">⏳</div>
-                    <h4 class="text-muted">No courses currently found in the registry.</h4>
+            </div>
+        </div>
+
+        <!-- Windowed Pagination -->
+        <div th:if="${totalPages > 1}" class="d-flex justify-content-center mt-4">
+            <nav>
+                <ul class="pagination gap-2">
+                    <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled'">
+                        <a class="page-link rounded-4 border-0 shadow-sm px-4 py-2 fw-bold"
+                           th:href="@{/courses(page=${currentPage - 1})}">Previous</a>
+                    </li>
+                    <th:block th:with="startPage=${T(java.lang.Math).max(0, currentPage - 2)},
+                                       endPage=${T(java.lang.Math).min(totalPages - 1, currentPage + 2)}">
+                        <li th:if="${startPage > 0}" class="page-item">
+                            <a class="page-link rounded-4 border-0 shadow-sm px-4 py-2 fw-bold"
+                               th:href="@{/courses(page=0)}">1</a>
+                        </li>
+                        <li th:if="${startPage > 1}" class="page-item disabled">
+                            <span class="page-link border-0 bg-transparent">…</span>
+                        </li>
+                        <li class="page-item"
+                            th:each="i : ${#numbers.sequence(startPage, endPage)}"
+                            th:classappend="${currentPage == i} ? 'active'">
+                            <a class="page-link rounded-4 border-0 shadow-sm px-4 py-2 fw-bold"
+                               th:href="@{/courses(page=${i})}" th:text="${i + 1}">1</a>
+                        </li>
+                        <li th:if="${endPage < totalPages - 2}" class="page-item disabled">
+                            <span class="page-link border-0 bg-transparent">…</span>
+                        </li>
+                        <li th:if="${endPage < totalPages - 1}" class="page-item">
+                            <a class="page-link rounded-4 border-0 shadow-sm px-4 py-2 fw-bold"
+                               th:href="@{/courses(page=${totalPages - 1})}" th:text="${totalPages}">N</a>
+                        </li>
+                    </th:block>
+                    <li class="page-item" th:classappend="${currentPage == totalPages - 1} ? 'disabled'">
+                        <a class="page-link rounded-4 border-0 shadow-sm px-4 py-2 fw-bold"
+                           th:href="@{/courses(page=${currentPage + 1})}">Next</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+
+        <!-- Auth popup modal -->
+        <div class="modal fade" id="authModal" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content border-0 shadow-lg" style="border-radius: 20px; overflow: hidden;">
+                    <div class="modal-body text-center p-5">
+                        <div class="fs-1 mb-3">🔒</div>
+                        <h4 class="fw-bold mb-2">Access Restricted</h4>
+                        <p class="text-muted mb-4">Only authorized users are allowed to add new courses.</p>
+                        <button type="button" class="btn btn-premium px-5" data-bs-dismiss="modal">Got it</button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -41,6 +109,57 @@
         <div th:replace="~{fragments :: footer}"></div>
     </div>
 </div>
+
+<style>
+    .fw-black { font-weight: 900; }
+
+    /* Course card color palette — 6 rotating themes */
+    .course-card { transition: transform 0.25s ease, box-shadow 0.25s ease; }
+    .course-card:hover { transform: translateY(-6px); box-shadow: 0 20px 40px -10px rgba(0,0,0,0.15); }
+
+    .course-card.color-0 { background: #eff6ff; border-color: #bfdbfe !important; }
+    .course-card.color-0 .course-title { color: #1d4ed8; }
+    .course-card.color-0 .course-subtitle { color: #3b82f6; }
+    .course-card.color-0 .credits-badge { background: #dbeafe; color: #1d4ed8; }
+    .course-card.color-0 .course-code { color: #2563eb; }
+
+    .course-card.color-1 { background: #f0fdf4; border-color: #bbf7d0 !important; }
+    .course-card.color-1 .course-title { color: #15803d; }
+    .course-card.color-1 .course-subtitle { color: #22c55e; }
+    .course-card.color-1 .credits-badge { background: #dcfce7; color: #15803d; }
+    .course-card.color-1 .course-code { color: #16a34a; }
+
+    .course-card.color-2 { background: #fdf4ff; border-color: #e9d5ff !important; }
+    .course-card.color-2 .course-title { color: #7e22ce; }
+    .course-card.color-2 .course-subtitle { color: #a855f7; }
+    .course-card.color-2 .credits-badge { background: #f3e8ff; color: #7e22ce; }
+    .course-card.color-2 .course-code { color: #9333ea; }
+
+    .course-card.color-3 { background: #fff7ed; border-color: #fed7aa !important; }
+    .course-card.color-3 .course-title { color: #c2410c; }
+    .course-card.color-3 .course-subtitle { color: #f97316; }
+    .course-card.color-3 .credits-badge { background: #ffedd5; color: #c2410c; }
+    .course-card.color-3 .course-code { color: #ea580c; }
+
+    .course-card.color-4 { background: #fff1f2; border-color: #fecdd3 !important; }
+    .course-card.color-4 .course-title { color: #be123c; }
+    .course-card.color-4 .course-subtitle { color: #f43f5e; }
+    .course-card.color-4 .credits-badge { background: #ffe4e6; color: #be123c; }
+    .course-card.color-4 .course-code { color: #e11d48; }
+
+    .course-card.color-5 { background: #f0fdfa; border-color: #99f6e4 !important; }
+    .course-card.color-5 .course-title { color: #0f766e; }
+    .course-card.color-5 .course-subtitle { color: #14b8a6; }
+    .course-card.color-5 .credits-badge { background: #ccfbf1; color: #0f766e; }
+    .course-card.color-5 .course-code { color: #0d9488; }
+</style>
+
+<script>
+    document.getElementById('addCourseBtn').addEventListener('click', function () {
+        var modal = new bootstrap.Modal(document.getElementById('authModal'));
+        modal.show();
+    });
+</script>
 
 </body>
 </html>

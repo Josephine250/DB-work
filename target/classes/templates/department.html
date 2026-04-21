@@ -7,48 +7,42 @@
 
 <div id="main-content">
     <div class="container-fluid">
-        <h1 class="display-4 fw-bold mb-4" style="color: #1e293b; letter-spacing: -2px;">Academic Departments</h1>
+        <h1 class="display-4 fw-bold mb-2" style="color: #1e293b; letter-spacing: -2px;">Academic Departments</h1>
         <p class="lead text-muted mb-5">Explore our diverse academic departments and learning facilities.</p>
-        
-        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
-            <!-- Computer Science -->
-            <div class="col">
-                <div class="portal-card h-100 p-4 border-0 shadow-sm rounded-4 transition hover-shadow-lg">
-                    <div class="fs-1 mb-3">💻</div>
-                    <h4 class="fw-bold fs-4 mb-2">Computer Science</h4>
-                    <p class="text-muted small">Focused on software engineering, AI, and data science. Innovative research at your fingertips.</p>
-                    <div class="mt-4 d-flex justify-content-between align-items-center">
-                        <span class="badge bg-soft-primary text-primary fw-bold p-2 px-3">28 Faculty</span>
-                        <a href="#" class="text-primary fw-bold text-decoration-none">Learn More →</a>
-                    </div>
-                </div>
-            </div>
 
-            <!-- Engineering -->
-            <div class="col">
-                <div class="portal-card h-100 p-4 border-0 shadow-sm rounded-4 transition hover-shadow-lg border-start border-5 border-success">
-                    <div class="fs-1 mb-3">⚙️</div>
-                    <h4 class="fw-bold fs-4 mb-2 text-success">Engineering</h4>
-                    <p class="text-muted small">Specialized fields in Civil, Mechanical, and Electrical. Applied knowledge for the future.</p>
-                    <div class="mt-4 d-flex justify-content-between align-items-center">
-                        <span class="badge bg-soft-success text-success fw-bold p-2 px-3">42 Faculty</span>
-                        <a href="#" class="text-success fw-bold text-decoration-none">Learn More →</a>
-                    </div>
-                </div>
+        <!-- Stats bar -->
+        <div class="portal-card d-flex align-items-center gap-4 mb-5 py-4 px-5" style="border-radius: 24px;">
+            <div class="fs-2">🏢</div>
+            <div>
+                <h2 class="fw-black mb-0 text-primary" th:text="${departments.size()}">0</h2>
+                <small class="text-muted fw-bold text-uppercase">Total Departments</small>
             </div>
+        </div>
 
-            <!-- Business Administration -->
-            <div class="col">
-                <div class="portal-card h-100 p-4 border-0 shadow-sm rounded-4 transition hover-shadow-lg">
-                    <div class="fs-1 mb-3">📊</div>
-                    <h4 class="fw-bold fs-4 mb-2">Business Admin</h4>
-                    <p class="text-muted small">Equipping the next generation of global leaders, entrepreneurs, and finance experts.</p>
-                    <div class="mt-4 d-flex justify-content-between align-items-center">
-                        <span class="badge bg-soft-primary text-primary fw-bold p-2 px-3">15 Faculty</span>
-                        <a href="#" class="text-primary fw-bold text-decoration-none">Learn More →</a>
+        <!-- Real departments from DB -->
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4" th:if="${not #lists.isEmpty(departments)}">
+            <div class="col" th:each="dept, iterStat : ${departments}">
+                <div class="portal-card h-100 p-4 rounded-4 dept-card"
+                     th:classappend="'dept-color-' + ${iterStat.index % 5}">
+                    <div class="dept-icon fs-1 mb-3">🏛️</div>
+                    <h4 class="fw-bold fs-4 mb-2 dept-name" th:text="${dept.name}">Department Name</h4>
+                    <p class="dept-desc small mb-4"
+                       th:text="${dept.description != null and !dept.description.isEmpty() ? dept.description : 'Academic department offering specialized courses and programs.'}">
+                        Description
+                    </p>
+                    <div class="mt-auto d-flex justify-content-between align-items-center">
+                        <span class="dept-badge fw-bold small px-3 py-2 rounded-pill"
+                              th:text="'ID: ' + ${dept.id}">ID</span>
                     </div>
                 </div>
             </div>
+        </div>
+
+        <!-- Empty state -->
+        <div th:if="${#lists.isEmpty(departments)}" class="text-center py-5">
+            <div class="fs-1 mb-3">🏢</div>
+            <h4 class="text-muted">No departments found in the registry.</h4>
+            <p class="text-muted small">Departments are created automatically when students are registered with a department name.</p>
         </div>
 
         <div th:replace="~{fragments :: footer}"></div>
@@ -56,8 +50,33 @@
 </div>
 
 <style>
-    .bg-soft-primary { background: #e0e7ff; }
-    .bg-soft-success { background: #dcfce7; }
+    .dept-card { transition: transform 0.25s ease, box-shadow 0.25s ease; border: 1px solid transparent; }
+    .dept-card:hover { transform: translateY(-6px); box-shadow: 0 20px 40px -10px rgba(0,0,0,0.12); }
+
+    .dept-color-0 { background: #eff6ff; border-color: #bfdbfe !important; }
+    .dept-color-0 .dept-name { color: #1d4ed8; }
+    .dept-color-0 .dept-desc { color: #3b82f6; }
+    .dept-color-0 .dept-badge { background: #dbeafe; color: #1d4ed8; }
+
+    .dept-color-1 { background: #f0fdf4; border-color: #bbf7d0 !important; }
+    .dept-color-1 .dept-name { color: #15803d; }
+    .dept-color-1 .dept-desc { color: #16a34a; }
+    .dept-color-1 .dept-badge { background: #dcfce7; color: #15803d; }
+
+    .dept-color-2 { background: #fdf4ff; border-color: #e9d5ff !important; }
+    .dept-color-2 .dept-name { color: #7e22ce; }
+    .dept-color-2 .dept-desc { color: #9333ea; }
+    .dept-color-2 .dept-badge { background: #f3e8ff; color: #7e22ce; }
+
+    .dept-color-3 { background: #fff7ed; border-color: #fed7aa !important; }
+    .dept-color-3 .dept-name { color: #c2410c; }
+    .dept-color-3 .dept-desc { color: #ea580c; }
+    .dept-color-3 .dept-badge { background: #ffedd5; color: #c2410c; }
+
+    .dept-color-4 { background: #f0fdfa; border-color: #99f6e4 !important; }
+    .dept-color-4 .dept-name { color: #0f766e; }
+    .dept-color-4 .dept-desc { color: #0d9488; }
+    .dept-color-4 .dept-badge { background: #ccfbf1; color: #0f766e; }
 </style>
 
 </body>
